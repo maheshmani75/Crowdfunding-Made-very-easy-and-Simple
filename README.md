@@ -16,11 +16,11 @@
 
 | Dashboard | Connect Wallet |
 |:---------:|:--------------:|
-| ![Dashboard](./screenshots/product%20ui.png) | ![Connect Wallet](./screenshots/wallet%20option.png) |
+| ![Dashboard](./screenshots/product_ui.png) | ![Connect Wallet](./screenshots/wallet_option.png) |
 
 | Pledge Success | Explorer Verified |
 |:--------------:|:-----------------:|
-| ![Pledge Success](./screenshots/plledged%20succes.png) | ![Explorer Verified](./screenshots/verified.png) |
+| ![Pledge Success](./screenshots/pledged_success.png) | ![Explorer Verified](./screenshots/verified.png) |
 
 ---
 
@@ -69,8 +69,6 @@ These are real, on-chain invocations of the `pledge()` function on this contract
 | # | Transaction Hash | Explorer Link |
 |---|------------------|---------------|
 | 1 | `34476088cb4303d78f872e63b3001ae23ff92650d2a4de6c14552222627ce828` | [View on Stellar Expert ↗](https://stellar.expert/explorer/testnet/tx/34476088cb4303d78f872e63b3001ae23ff92650d2a4de6c14552222627ce828) |
-| 2 | `[Optional second pledge hash]` | [View on Stellar Expert ↗](#) |
-| 3 | `[Optional third pledge hash]` | [View on Stellar Expert ↗](#) |
 
 ---
 
@@ -78,7 +76,7 @@ These are real, on-chain invocations of the `pledge()` function on this contract
 
 The app supports multiple wallets via the connect modal:
 
-![Wallet Options](./screenshots/wallet%20option.png)
+![Wallet Options](./screenshots/wallet_option.png)
 
 ### Contract Functions
 
