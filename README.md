@@ -16,15 +16,11 @@
 
 | Dashboard | Connect Wallet |
 |:---------:|:--------------:|
-| ![Dashboard](./screenshots/dashboard.png) | ![Connect Wallet](./screenshots/connecting_pop%20UP.png) |
-
-| Connected & Balance | Sign Transaction |
-|:-------------------:|:----------------:|
-| ![Connected Wallet](./screenshots/connected_wallet_balance.png) | ![Sign Transaction](./screenshots/signature_wallet.png) |
+| ![Dashboard](./screenshots/product%20ui.png) | ![Connect Wallet](./screenshots/wallet%20option.png) |
 
 | Pledge Success | Explorer Verified |
 |:--------------:|:-----------------:|
-| ![Pledge Success](./screenshots/success_pledge.png) | ![Explorer Verified](./screenshots/verified.png) |
+| ![Pledge Success](./screenshots/plledged%20succes.png) | ![Explorer Verified](./screenshots/verified.png) |
 
 ---
 
@@ -72,9 +68,9 @@ These are real, on-chain invocations of the `pledge()` function on this contract
 
 | # | Transaction Hash | Explorer Link |
 |---|------------------|---------------|
-| 1 | `[Insert your pledge transaction hash here]` | [View on Stellar Expert ↗](#) |
-| 2 | `[Insert your pledge transaction hash here]` | [View on Stellar Expert ↗](#) |
-| 3 | `[Insert your pledge transaction hash here]` | [View on Stellar Expert ↗](#) |
+| 1 | `34476088cb4303d78f872e63b3001ae23ff92650d2a4de6c14552222627ce828` | [View on Stellar Expert ↗](https://stellar.expert/explorer/testnet/tx/34476088cb4303d78f872e63b3001ae23ff92650d2a4de6c14552222627ce828) |
+| 2 | `[Optional second pledge hash]` | [View on Stellar Expert ↗](#) |
+| 3 | `[Optional third pledge hash]` | [View on Stellar Expert ↗](#) |
 
 ---
 
@@ -82,7 +78,7 @@ These are real, on-chain invocations of the `pledge()` function on this contract
 
 The app supports multiple wallets via the connect modal:
 
-![Wallet Options](./screenshots/multiple%20wallet%20option.png)
+![Wallet Options](./screenshots/wallet%20option.png)
 
 ### Contract Functions
 
