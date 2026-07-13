@@ -195,12 +195,6 @@ level 2/
 
 ---
 
-## 👤 Author
-
-**Anukri** — [@anukri7970](https://github.com/anukri7970)
-
----
-
 <div align="center">
   Built with ❤️ on <strong>Stellar Soroban</strong>
 </div>
