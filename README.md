@@ -4,7 +4,7 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-crowdfunding--made--simple.vercel.app-6D28D9?style=for-the-badge)](https://crowdfunding-made-simple.vercel.app)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-crowdfunding--made--very--easy--and--sim.vercel.app-10b981?style=for-the-badge)](https://crowdfunding-made-very-easy-and-sim.vercel.app/)
 [![Stellar Testnet](https://img.shields.io/badge/Network-Stellar_Testnet-00D2FF?style=for-the-badge)](https://stellar.org)
 [![Soroban](https://img.shields.io/badge/Smart_Contract-Soroban-FF6B6B?style=for-the-badge)](https://soroban.stellar.org)
 
@@ -190,7 +190,7 @@ level 2/
 
 | | Link |
 |--|------|
-| **Frontend** | https://crowdfunding-made-simple.vercel.app |
+| **Frontend** | https://crowdfunding-made-very-easy-and-sim.vercel.app/ |
 | **Contract** | [stellar.expert/explorer/testnet/contract/CC4F...](https://stellar.expert/explorer/testnet/contract/CC4FMLPQPVSMTSZFEGXSZO6NZ276KDP4P454CPKZDEZCWXRZ4RDS7TOL) |
 | **Network** | Stellar Testnet |
 | **RPC** | https://soroban-testnet.stellar.org |
