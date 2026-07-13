@@ -23,7 +23,7 @@ async function main() {
 
     let account = await server.getAccount(keypair.publicKey());
     
-    const wasmPath = path.join(process.cwd(), '../../contracts/eventfund/target/wasm32-unknown-unknown/release/eventfund.wasm');
+    const wasmPath = path.join(process.cwd(), '../contracts/eventfund/target/wasm32-unknown-unknown/release/eventfund.wasm');
     const wasmBuffer = fs.readFileSync(wasmPath);
     console.log(`Loaded WASM file: ${wasmPath} (${wasmBuffer.length} bytes)`);
 

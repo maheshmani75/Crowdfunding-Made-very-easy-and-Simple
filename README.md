@@ -58,11 +58,11 @@
 
 **Contract ID (Testnet):**
 ```
-CDL4SNU7TUNK2NA3EU34WALUPPMDFJOBK4GZJ3S44SGDZEOXWBA35DAM
+CC4FMLPQPVSMTSZFEGXSZO6NZ276KDP4P454CPKZDEZCWXRZ4RDS7TOL
 ```
 
 **Verify on Stellar Expert:**
-🔗 [View Contract on Explorer](https://stellar.expert/explorer/testnet/contract/CDL4SNU7TUNK2NA3EU34WALUPPMDFJOBK4GZJ3S44SGDZEOXWBA35DAM)
+🔗 [View Contract on Explorer](https://stellar.expert/explorer/testnet/contract/CC4FMLPQPVSMTSZFEGXSZO6NZ276KDP4P454CPKZDEZCWXRZ4RDS7TOL)
 
 ---
 
@@ -72,9 +72,9 @@ These are real, on-chain invocations of the `pledge()` function on this contract
 
 | # | Transaction Hash | Explorer Link |
 |---|------------------|---------------|
-| 1 | `09b33a274f1c2a5f028d8131ab9d7560a42855f6bf52a6ed72cbe95f0c4dcef7` | [View on Stellar Expert ↗](https://stellar.expert/explorer/testnet/tx/09b33a274f1c2a5f028d8131ab9d7560a42855f6bf52a6ed72cbe95f0c4dcef7) |
-| 2 | `c94020533cecab420279ec7f7188c3d91ebb2c8d77a66881885cfd6110b794b9` | [View on Stellar Expert ↗](https://stellar.expert/explorer/testnet/tx/c94020533cecab420279ec7f7188c3d91ebb2c8d77a66881885cfd6110b794b9) |
-| 3 | `6ad05b7e64ecdfcc65bfa815f33b424a95d17281016cd91c39aa8c6ac89cd06e` | [View on Stellar Expert ↗](https://stellar.expert/explorer/testnet/tx/6ad05b7e64ecdfcc65bfa815f33b424a95d17281016cd91c39aa8c6ac89cd06e) |
+| 1 | `[Insert your pledge transaction hash here]` | [View on Stellar Expert ↗](#) |
+| 2 | `[Insert your pledge transaction hash here]` | [View on Stellar Expert ↗](#) |
+| 3 | `[Insert your pledge transaction hash here]` | [View on Stellar Expert ↗](#) |
 
 ---
 
@@ -124,7 +124,7 @@ cd Crowdfunding-Made-simple/frontend
 npm install
 
 # Create .env file
-echo "VITE_CONTRACT_ID=CDL4SNU7TUNK2NA3EU34WALUPPMDFJOBK4GZJ3S44SGDZEOXWBA35DAM" > .env
+echo "VITE_CONTRACT_ID=CC4FMLPQPVSMTSZFEGXSZO6NZ276KDP4P454CPKZDEZCWXRZ4RDS7TOL" > .env
 
 # Start dev server
 npm run dev
@@ -195,7 +195,7 @@ level 2/
 | | Link |
 |--|------|
 | **Frontend** | https://crowdfunding-made-simple.vercel.app |
-| **Contract** | [stellar.expert/explorer/testnet/contract/CDL4...](https://stellar.expert/explorer/testnet/contract/CDL4SNU7TUNK2NA3EU34WALUPPMDFJOBK4GZJ3S44SGDZEOXWBA35DAM) |
+| **Contract** | [stellar.expert/explorer/testnet/contract/CC4F...](https://stellar.expert/explorer/testnet/contract/CC4FMLPQPVSMTSZFEGXSZO6NZ276KDP4P454CPKZDEZCWXRZ4RDS7TOL) |
 | **Network** | Stellar Testnet |
 | **RPC** | https://soroban-testnet.stellar.org |
 
