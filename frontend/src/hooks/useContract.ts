@@ -218,10 +218,24 @@ export function useContract(walletAddress: string | null) {
     } catch (e: any) {
       console.error(e);
       setTxStatus('FAIL');
-      if (e?.message?.includes("User declined") || e?.message?.includes("rejected")) {
-        setError("Transaction rejected by user.");
+
+      const msg = e?.message || '';
+
+      // Error Type 1: User rejected / declined signing in wallet
+      if (msg.includes('User declined') || msg.includes('rejected') || msg.includes('cancelled') || msg.includes('denied')) {
+        setError('Transaction rejected: You declined the transaction in your wallet.');
+      
+      // Error Type 2: Smart contract panic (deadline passed / insufficient funds)
+      } else if (msg.includes('Deadline passed') || msg.includes('HostError') || msg.includes('insufficient') || msg.includes('balance')) {
+        setError('Contract error: Either the deadline has passed or you have insufficient XLM balance.');
+      
+      // Error Type 3: Network / RPC failure
+      } else if (msg.includes('fetch') || msg.includes('network') || msg.includes('timeout') || msg.includes('ECONNREFUSED') || msg.includes('Failed to fetch')) {
+        setError('Network error: Could not reach the Stellar RPC. Please check your connection and try again.');
+      
+      // Fallback
       } else {
-        setError(e?.message || "An error occurred.");
+        setError(msg || 'An unexpected error occurred. Please try again.');
       }
     } finally {
       setIsPledging(false);
