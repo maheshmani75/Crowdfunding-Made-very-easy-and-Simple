@@ -64,6 +64,26 @@ CDL4SNU7TUNK2NA3EU34WALUPPMDFJOBK4GZJ3S44SGDZEOXWBA35DAM
 **Verify on Stellar Expert:**
 🔗 [View Contract on Explorer](https://stellar.expert/explorer/testnet/contract/CDL4SNU7TUNK2NA3EU34WALUPPMDFJOBK4GZJ3S44SGDZEOXWBA35DAM)
 
+---
+
+### 🧾 Transaction Hashes (Verifiable `pledge()` calls on Testnet)
+
+These are real, on-chain invocations of the `pledge()` function on this contract:
+
+| # | Transaction Hash | Explorer Link |
+|---|------------------|---------------|
+| 1 | `09b33a274f1c2a5f028d8131ab9d7560a42855f6bf52a6ed72cbe95f0c4dcef7` | [View on Stellar Expert ↗](https://stellar.expert/explorer/testnet/tx/09b33a274f1c2a5f028d8131ab9d7560a42855f6bf52a6ed72cbe95f0c4dcef7) |
+| 2 | `c94020533cecab420279ec7f7188c3d91ebb2c8d77a66881885cfd6110b794b9` | [View on Stellar Expert ↗](https://stellar.expert/explorer/testnet/tx/c94020533cecab420279ec7f7188c3d91ebb2c8d77a66881885cfd6110b794b9) |
+| 3 | `6ad05b7e64ecdfcc65bfa815f33b424a95d17281016cd91c39aa8c6ac89cd06e` | [View on Stellar Expert ↗](https://stellar.expert/explorer/testnet/tx/6ad05b7e64ecdfcc65bfa815f33b424a95d17281016cd91c39aa8c6ac89cd06e) |
+
+---
+
+### 👛 Wallet Options Available
+
+The app supports multiple wallets via the connect modal:
+
+![Wallet Options](./screenshots/connecting_pop%20UP.png)
+
 ### Contract Functions
 
 | Function | Description |
