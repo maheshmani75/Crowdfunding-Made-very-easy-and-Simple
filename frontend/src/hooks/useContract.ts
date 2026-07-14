@@ -39,6 +39,8 @@ export function useContract(walletAddress: string | null) {
       setIsFetching(false);
       return;
     }
+    
+    // Fetch contract state
     try {
       // get target
       const targetTx = new TransactionBuilder(
@@ -87,60 +89,59 @@ export function useContract(walletAddress: string | null) {
         const res = scValToNative(pledgedSim.result.retval);
         setPledged(Number(res) / 10000000);
       }
+    } catch (e) {
+      console.error("Contract fetch error:", e);
+    }
 
-      // fetch wallet specific data
-      if (walletAddress) {
-        // Fetch balance from Horizon
-        try {
-          const res = await fetch(`https://horizon-testnet.stellar.org/accounts/${walletAddress}`);
-          if (res.ok) {
-            const data = await res.json();
-            const nativeBalance = data.balances.find((b: any) => b.asset_type === 'native');
-            if (nativeBalance) setUserBalance(parseFloat(nativeBalance.balance));
-            else setUserBalance(0);
-          } else {
-            setUserBalance(0);
-          }
-        } catch (e) {
-          console.error("Failed to fetch balance", e);
+    // Fetch wallet specific data
+    if (walletAddress) {
+      // Fetch balance from Horizon
+      try {
+        const res = await fetch(`https://horizon-testnet.stellar.org/accounts/${walletAddress}`);
+        if (res.ok) {
+          const data = await res.json();
+          const nativeBalance = data.balances.find((b: any) => b.asset_type === 'native');
+          if (nativeBalance) setUserBalance(parseFloat(nativeBalance.balance));
+          else setUserBalance(0);
+        } else {
           setUserBalance(0);
         }
-
-        // Fetch past pledges for user from events
-        try {
-          const events = await server.getEvents({
-            startLedger: 1000000, // Safe early ledger on testnet
-            filters: [
-              {
-                type: 'contract',
-                contractIds: [CONTRACT_ID],
-                topics: [
-                  [xdr.ScVal.scvSymbol('pledged').toXDR('base64')],
-                  [xdr.ScVal.scvAddress(xdr.ScAddress.scAddressTypeAccount(StrKey.decodeEd25519PublicKey(walletAddress))).toXDR('base64')]
-                ]
-              }
-            ],
-            limit: 10000
-          });
-
-          if (events.events) {
-            let totalUserPledged = 0;
-            for (const ev of events.events) {
-              const amountStroops = Number(scValToNative(ev.value));
-              totalUserPledged += amountStroops / 10000000;
-            }
-            setUserPledged(totalUserPledged);
-          }
-        } catch(e) {
-          console.error("Failed to fetch user events", e);
-        }
+      } catch (e) {
+        console.error("Failed to fetch balance", e);
+        setUserBalance(0);
       }
 
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsFetching(false);
+      // Fetch past pledges for user from events
+      try {
+        const events = await server.getEvents({
+          startLedger: 1000000, // Safe early ledger on testnet
+          filters: [
+            {
+              type: 'contract',
+              contractIds: [CONTRACT_ID],
+              topics: [
+                [xdr.ScVal.scvSymbol('pledged').toXDR('base64')],
+                [xdr.ScVal.scvAddress(xdr.ScAddress.scAddressTypeAccount(StrKey.decodeEd25519PublicKey(walletAddress))).toXDR('base64')]
+              ]
+            }
+          ],
+          limit: 10000
+        });
+
+        if (events.events) {
+          let totalUserPledged = 0;
+          for (const ev of events.events) {
+            const amountStroops = Number(scValToNative(ev.value));
+            totalUserPledged += amountStroops / 10000000;
+          }
+          setUserPledged(totalUserPledged);
+        }
+      } catch(e) {
+        console.error("Failed to fetch user events", e);
+      }
     }
+
+    setIsFetching(false);
   }, [walletAddress]);
 
   useEffect(() => {
