@@ -48,7 +48,7 @@ export const WalletConnect: React.FC<WalletConnectProps> = ({ address, onConnect
     setError(null);
     try {
       StellarWalletsKit.setWallet(walletId);
-      const { address: publicKey } = await StellarWalletsKit.getAddress();
+      const { address: publicKey } = await StellarWalletsKit.selectedModule.getAddress();
       onConnect(publicKey);
     } catch (e: any) {
       console.error(e);
