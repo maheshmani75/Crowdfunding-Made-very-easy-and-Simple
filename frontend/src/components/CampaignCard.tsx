@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useContract } from '../hooks/useContract';
 import { useContractEvents } from '../hooks/useContractEvents';
-import { Loader2, Coins, TrendingUp } from 'lucide-react';
+import { Loader2, Coins, TrendingUp, ExternalLink, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import toast from 'react-hot-toast';
 
@@ -160,8 +160,29 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({ walletAddress }) => 
             </div>
           )}
         </div>
+
+        {/* Persistent Explorer Link after successful transaction */}
+        {txStatus === 'SUCCESS' && txHash && (
+          <div className="mt-4 rounded-2xl border border-green-500/30 bg-green-500/10 p-4 flex items-center justify-between gap-4 animate-fade-in">
+            <div className="flex items-center gap-3">
+              <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-green-300">Pledge Confirmed on Testnet!</p>
+                <p className="text-xs text-green-400/70 font-mono mt-0.5 truncate max-w-[200px]">{txHash.slice(0,16)}...{txHash.slice(-8)}</p>
+              </div>
+            </div>
+            <a
+              href={`https://stellar.expert/explorer/testnet/tx/${txHash}`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-2 bg-green-500/20 hover:bg-green-500/40 text-green-300 hover:text-green-100 font-semibold text-sm px-4 py-2 rounded-xl transition-all border border-green-500/30 whitespace-nowrap"
+            >
+              <ExternalLink className="w-4 h-4" />
+              View on Explorer
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );
 };
-

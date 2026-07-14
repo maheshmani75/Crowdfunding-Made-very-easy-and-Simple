@@ -225,7 +225,7 @@ export function useContract(walletAddress: string | null) {
       }
     } finally {
       setIsPledging(false);
-      setTimeout(() => setTxStatus('IDLE'), 8000);
+      setTimeout(() => setTxStatus('IDLE'), 30000);
     }
   };
 
