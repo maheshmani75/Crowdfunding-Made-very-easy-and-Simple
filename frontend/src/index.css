@@ -1,6 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-background: #0B0B0F;
+  --color-surface: #15151D;
+  --color-primary: #6D28D9;
+  --color-secondary: #00D2FF;
+}
 
 body {
   margin: 0;
@@ -9,7 +14,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0B0B0F;
+  background-color: var(--color-background);
   color: white;
 }
 
@@ -23,7 +28,7 @@ code {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B0B0F;
+  background: var(--color-background);
 }
 ::-webkit-scrollbar-thumb {
   background: #2D2D3B;
