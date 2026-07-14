@@ -8,20 +8,12 @@ import { Toaster } from 'react-hot-toast';
 function App() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
 
-  // Sync wallet address if available in local storage
-  useEffect(() => {
-    const stored = localStorage.getItem('walletAddress');
-    if (stored) setWalletAddress(stored);
-  }, []);
-
   const handleConnect = (address: string) => {
     setWalletAddress(address);
-    localStorage.setItem('walletAddress', address);
   };
 
   const handleDisconnect = () => {
     setWalletAddress(null);
-    localStorage.removeItem('walletAddress');
   };
 
   return (
