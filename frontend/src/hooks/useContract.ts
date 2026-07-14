@@ -193,7 +193,7 @@ export function useContract(walletAddress: string | null) {
 
       const preparedTx = await server.prepareTransaction(tx);
       
-      const { signedTxXdr } = await StellarWalletsKit.signTransaction(preparedTx.toXDR());
+      const { signedTxXdr } = await StellarWalletsKit.signTransaction(preparedTx.toXDR(), { networkPassphrase: NETWORK_PASSPHRASE });
       const signedTx = TransactionBuilder.fromXDR(signedTxXdr, NETWORK_PASSPHRASE);
       
       const submitRes = await server.sendTransaction(signedTx);
