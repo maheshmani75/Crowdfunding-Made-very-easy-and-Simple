@@ -1,5 +1,4 @@
-import pkg from '@stellar/stellar-sdk';
-const { Keypair, Networks, rpc, TransactionBuilder, xdr, Operation, StrKey, Asset, Contract } = pkg;
+import { Keypair, Networks, rpc, TransactionBuilder, xdr, Operation, StrKey, Asset, Contract } from '@stellar/stellar-sdk';
 import fs from 'fs';
 import path from 'path';
 
@@ -44,12 +43,12 @@ async function main() {
     uploadTx = await server.prepareTransaction(uploadTx);
     uploadTx.sign(keypair);
 
-    let uploadResp = await server.submitTransaction(uploadTx);
+    let uploadResp = await server.sendTransaction(uploadTx);
     console.log("Upload transaction submitted.");
     let uploadTxResult = await server.getTransaction(uploadResp.hash);
     
     // Check status
-    while (uploadTxResult.status === 'PENDING') {
+    while (uploadTxResult.status === 'PENDING' || uploadTxResult.status === 'NOT_FOUND') {
         console.log("Waiting for upload transaction to complete...");
         await new Promise(resolve => setTimeout(resolve, 2000));
         uploadTxResult = await server.getTransaction(uploadResp.hash);
@@ -62,9 +61,8 @@ async function main() {
 
     // Extract WASM id
     let wasmId;
-    let meta = xdr.TransactionMeta.fromXDR(uploadTxResult.resultMetaXdr, 'base64');
-    let results = meta.v3().sorobanMeta().returnValue().vec();
-    wasmId = results[0].bytes();
+    let meta = uploadTxResult.resultMetaXdr;
+    wasmId = meta.value().sorobanMeta().returnValue().bytes();
 
     console.log(`Contract WASM ID: ${wasmId.toString('hex')}`);
 
@@ -100,11 +98,11 @@ async function main() {
     createTx = await server.prepareTransaction(createTx);
     createTx.sign(keypair);
 
-    let createResp = await server.submitTransaction(createTx);
+    let createResp = await server.sendTransaction(createTx);
     console.log("Create transaction submitted.");
     let createTxResult = await server.getTransaction(createResp.hash);
 
-    while (createTxResult.status === 'PENDING') {
+    while (createTxResult.status === 'PENDING' || createTxResult.status === 'NOT_FOUND') {
         console.log("Waiting for create transaction to complete...");
         await new Promise(resolve => setTimeout(resolve, 2000));
         createTxResult = await server.getTransaction(createResp.hash);
@@ -116,8 +114,8 @@ async function main() {
     }
 
     // Extract contract ID
-    meta = xdr.TransactionMeta.fromXDR(createTxResult.resultMetaXdr, 'base64');
-    let contractIdBytes = meta.v3().sorobanMeta().returnValue().address().contractId();
+    meta = createTxResult.resultMetaXdr;
+    let contractIdBytes = meta.value().sorobanMeta().returnValue().address().contractId();
     let contractId = StrKey.encodeContract(contractIdBytes);
 
     console.log(`Contract successfully instantiated!`);
@@ -158,11 +156,11 @@ async function main() {
     initTx = await server.prepareTransaction(initTx);
     initTx.sign(keypair);
 
-    let initResp = await server.submitTransaction(initTx);
+    let initResp = await server.sendTransaction(initTx);
     console.log("Init transaction submitted.");
     let initTxResult = await server.getTransaction(initResp.hash);
 
-    while (initTxResult.status === 'PENDING') {
+    while (initTxResult.status === 'PENDING' || initTxResult.status === 'NOT_FOUND') {
         console.log("Waiting for init transaction to complete...");
         await new Promise(resolve => setTimeout(resolve, 2000));
         initTxResult = await server.getTransaction(initResp.hash);

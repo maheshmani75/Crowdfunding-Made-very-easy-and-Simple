@@ -7,7 +7,7 @@ import {
   xdr, 
   scValToNative, 
   nativeToScVal, 
-  StrKey 
+  Address 
 } from '@stellar/stellar-sdk';
 import { StellarWalletsKit } from "@creit.tech/stellar-wallets-kit";
 import { FreighterModule } from "@creit.tech/stellar-wallets-kit/modules/freighter";
@@ -17,7 +17,7 @@ const WalletNetwork = { TESTNET: 'TESTNET' };
 const FREIGHTER_ID = 'freighter';
 const allowAllModules = () => [new FreighterModule(), new AlbedoModule()];
 
-const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || 'CDV2KGOMMSSYWAKGO3ZOVUKB5ADNAJVSYFAB4TJI42NE73WKHHVSYXJB';
+const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || 'CDL4SNU7TUNK2NA3EU34WALUPPMDFJOBK4GZJ3S44SGDZEOXWBA35DAM';
 const RPC_URL = 'https://soroban-testnet.stellar.org';
 const NETWORK_PASSPHRASE = Networks.TESTNET;
 
@@ -50,7 +50,7 @@ export function useContract(walletAddress: string | null) {
       .addOperation(Operation.invokeHostFunction({
         func: xdr.HostFunction.hostFunctionTypeInvokeContract(
           new xdr.InvokeContractArgs({
-            contractAddress: xdr.ScAddress.scAddressTypeContract(StrKey.decodeContract(CONTRACT_ID)),
+            contractAddress: new Address(CONTRACT_ID).toScAddress(),
             functionName: 'get_target',
             args: []
           })
@@ -74,7 +74,7 @@ export function useContract(walletAddress: string | null) {
       .addOperation(Operation.invokeHostFunction({
         func: xdr.HostFunction.hostFunctionTypeInvokeContract(
           new xdr.InvokeContractArgs({
-            contractAddress: xdr.ScAddress.scAddressTypeContract(StrKey.decodeContract(CONTRACT_ID)),
+            contractAddress: new Address(CONTRACT_ID).toScAddress(),
             functionName: 'get_pledged',
             args: []
           })
@@ -121,7 +121,7 @@ export function useContract(walletAddress: string | null) {
               contractIds: [CONTRACT_ID],
               topics: [
                 [xdr.ScVal.scvSymbol('pledged').toXDR('base64')],
-                [xdr.ScVal.scvAddress(xdr.ScAddress.scAddressTypeAccount(StrKey.decodeEd25519PublicKey(walletAddress))).toXDR('base64')]
+                [new Address(walletAddress).toScVal().toXDR('base64')]
               ]
             }
           ],
@@ -177,11 +177,11 @@ export function useContract(walletAddress: string | null) {
       .addOperation(Operation.invokeHostFunction({
         func: xdr.HostFunction.hostFunctionTypeInvokeContract(
           new xdr.InvokeContractArgs({
-            contractAddress: xdr.ScAddress.scAddressTypeContract(StrKey.decodeContract(CONTRACT_ID)),
+            contractAddress: new Address(CONTRACT_ID).toScAddress(),
             functionName: 'pledge',
             args: [
-              xdr.ScVal.scvAddress(xdr.ScAddress.scAddressTypeAccount(StrKey.decodeEd25519PublicKey(walletAddress))),
-              xdr.ScVal.scvAddress(xdr.ScAddress.scAddressTypeContract(StrKey.decodeContract(nativeToken))),
+              new Address(walletAddress).toScVal(),
+              new Address(nativeToken).toScVal(),
               nativeToScVal(stroops, { type: 'i128' })
             ]
           })
@@ -196,11 +196,11 @@ export function useContract(walletAddress: string | null) {
       const { signedTxXdr } = await StellarWalletsKit.signTransaction(preparedTx.toXDR());
       const signedTx = TransactionBuilder.fromXDR(signedTxXdr, NETWORK_PASSPHRASE);
       
-      const submitRes = await server.submitTransaction(signedTx);
+      const submitRes = await server.sendTransaction(signedTx);
       
       let status = 'PENDING';
       let result;
-      while (status === 'PENDING') {
+      while (status === 'PENDING' || status === 'NOT_FOUND') {
         await new Promise(r => setTimeout(r, 2000));
         result = await server.getTransaction(submitRes.hash);
         status = result.status;
