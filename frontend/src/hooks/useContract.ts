@@ -17,7 +17,7 @@ const WalletNetwork = { TESTNET: 'TESTNET' };
 const FREIGHTER_ID = 'freighter';
 const allowAllModules = () => [new FreighterModule(), new AlbedoModule()];
 
-const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || '';
+const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || 'CBZ7A3GBMQF4Z3U4C7P7VFT2L2HGBJ5Z7T5CQRQ7V6HGF6O3ZTYLQEQX';
 const RPC_URL = 'https://soroban-testnet.stellar.org';
 const NETWORK_PASSPHRASE = Networks.TESTNET;
 
@@ -97,9 +97,13 @@ export function useContract(walletAddress: string | null) {
             const data = await res.json();
             const nativeBalance = data.balances.find((b: any) => b.asset_type === 'native');
             if (nativeBalance) setUserBalance(parseFloat(nativeBalance.balance));
+            else setUserBalance(0);
+          } else {
+            setUserBalance(0);
           }
         } catch (e) {
           console.error("Failed to fetch balance", e);
+          setUserBalance(0);
         }
 
         // Fetch past pledges for user from events

@@ -98,7 +98,6 @@ function App() {
             <div className="lg:col-span-2 space-y-8">
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-2xl font-bold">Featured Campaign</h2>
-                <span className="text-sm text-primary font-medium hover:text-secondary cursor-pointer transition-colors">View all</span>
               </div>
               
               {/* The Actual Soroban Campaign */}
