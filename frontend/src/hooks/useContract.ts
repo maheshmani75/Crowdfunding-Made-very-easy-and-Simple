@@ -17,7 +17,7 @@ const WalletNetwork = { TESTNET: 'TESTNET' };
 const FREIGHTER_ID = 'freighter';
 const allowAllModules = () => [new FreighterModule(), new AlbedoModule()];
 
-const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || 'CBZ7A3GBMQF4Z3U4C7P7VFT2L2HGBJ5Z7T5CQRQ7V6HGF6O3ZTYLQEQX';
+const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || 'CDV2KGOMMSSYWAKGO3ZOVUKB5ADNAJVSYFAB4TJI42NE73WKHHVSYXJB';
 const RPC_URL = 'https://soroban-testnet.stellar.org';
 const NETWORK_PASSPHRASE = Networks.TESTNET;
 

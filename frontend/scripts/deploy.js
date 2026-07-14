@@ -1,11 +1,12 @@
-import { Keypair, Networks, Server, TransactionBuilder, xdr, Operation, StrKey, Asset, Contract } from '@stellar/stellar-sdk';
+import pkg from '@stellar/stellar-sdk';
+const { Keypair, Networks, rpc, TransactionBuilder, xdr, Operation, StrKey, Asset, Contract } = pkg;
 import fs from 'fs';
 import path from 'path';
 
 // Generate a random keypair for deployment and fund it on testnet
 async function main() {
     console.log("Initializing Stellar SDK and connecting to Testnet...");
-    const server = new Server('https://soroban-testnet.stellar.org');
+    const server = new rpc.Server('https://soroban-testnet.stellar.org');
     
     const keypair = Keypair.random();
     console.log(`Generated Deployer Keypair: ${keypair.publicKey()}`);
@@ -23,7 +24,7 @@ async function main() {
 
     let account = await server.getAccount(keypair.publicKey());
     
-    const wasmPath = path.join(process.cwd(), '../contracts/eventfund/target/wasm32-unknown-unknown/release/eventfund.wasm');
+    const wasmPath = path.join(process.cwd(), '../../contracts/eventfund/target/wasm32-unknown-unknown/release/eventfund.wasm');
     const wasmBuffer = fs.readFileSync(wasmPath);
     console.log(`Loaded WASM file: ${wasmPath} (${wasmBuffer.length} bytes)`);
 
