@@ -20,12 +20,17 @@ export const WalletConnect: React.FC<WalletConnectProps> = ({ address, onConnect
   const [error, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Initialize the kit without a default selectedWalletId so we can choose later
-  const [kit] = useState(() => new StellarWalletsKit({
-    network: WalletNetwork.TESTNET,
-    selectedWalletId: 'freighter',
-    modules: allowAllModules()
-  }));
+  useEffect(() => {
+    try {
+      StellarWalletsKit.init({
+        network: WalletNetwork.TESTNET as any,
+        selectedWalletId: 'freighter',
+        modules: allowAllModules()
+      });
+    } catch(e) {
+      // Ignore if already initialized
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -42,8 +47,8 @@ export const WalletConnect: React.FC<WalletConnectProps> = ({ address, onConnect
     setIsOpen(false);
     setError(null);
     try {
-      kit.setWallet(walletId);
-      const publicKey = await kit.getPublicKey();
+      StellarWalletsKit.setWallet(walletId);
+      const { address: publicKey } = await StellarWalletsKit.getAddress();
       onConnect(publicKey);
     } catch (e: any) {
       console.error(e);

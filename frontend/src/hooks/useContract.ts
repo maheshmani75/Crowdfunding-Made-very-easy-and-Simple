@@ -188,14 +188,8 @@ export function useContract(walletAddress: string | null) {
 
       const preparedTx = await server.prepareTransaction(tx);
       
-      const kit = new StellarWalletsKit({
-        network: WalletNetwork.TESTNET,
-        selectedWalletId: FREIGHTER_ID,
-        modules: allowAllModules()
-      });
-
-      const signedXdr = await kit.signTransaction(preparedTx.toXDR());
-      const signedTx = TransactionBuilder.fromXDR(signedXdr.signedTxXdr, NETWORK_PASSPHRASE);
+      const { signedTxXdr } = await StellarWalletsKit.signTransaction(preparedTx.toXDR());
+      const signedTx = TransactionBuilder.fromXDR(signedTxXdr, NETWORK_PASSPHRASE);
       
       const submitRes = await server.submitTransaction(signedTx);
       
