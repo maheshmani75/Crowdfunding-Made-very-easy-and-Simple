@@ -11,10 +11,11 @@ import {
 } from '@stellar/stellar-sdk';
 import { StellarWalletsKit } from "@creit.tech/stellar-wallets-kit";
 import { FreighterModule } from "@creit.tech/stellar-wallets-kit/modules/freighter";
+import { AlbedoModule } from "@creit.tech/stellar-wallets-kit/modules/albedo";
 
 const WalletNetwork = { TESTNET: 'TESTNET' };
 const FREIGHTER_ID = 'freighter';
-const allowAllModules = () => [new FreighterModule()];
+const allowAllModules = () => [new FreighterModule(), new AlbedoModule()];
 
 const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || '';
 const RPC_URL = 'https://soroban-testnet.stellar.org';
@@ -23,6 +24,8 @@ const NETWORK_PASSPHRASE = Networks.TESTNET;
 export function useContract(walletAddress: string | null) {
   const [target, setTarget] = useState<number>(0);
   const [pledged, setPledged] = useState<number>(0);
+  const [userBalance, setUserBalance] = useState<number | null>(null);
+  const [userPledged, setUserPledged] = useState<number>(0);
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [isPledging, setIsPledging] = useState<boolean>(false);
   const [txStatus, setTxStatus] = useState<'IDLE' | 'PENDING' | 'SUCCESS' | 'FAIL'>('IDLE');
@@ -85,12 +88,56 @@ export function useContract(walletAddress: string | null) {
         setPledged(Number(res) / 10000000);
       }
 
+      // fetch wallet specific data
+      if (walletAddress) {
+        // Fetch balance from Horizon
+        try {
+          const res = await fetch(`https://horizon-testnet.stellar.org/accounts/${walletAddress}`);
+          if (res.ok) {
+            const data = await res.json();
+            const nativeBalance = data.balances.find((b: any) => b.asset_type === 'native');
+            if (nativeBalance) setUserBalance(parseFloat(nativeBalance.balance));
+          }
+        } catch (e) {
+          console.error("Failed to fetch balance", e);
+        }
+
+        // Fetch past pledges for user from events
+        try {
+          const events = await server.getEvents({
+            startLedger: 1000000, // Safe early ledger on testnet
+            filters: [
+              {
+                type: 'contract',
+                contractIds: [CONTRACT_ID],
+                topics: [
+                  [xdr.ScVal.scvSymbol('pledged').toXDR('base64')],
+                  [xdr.ScVal.scvAddress(xdr.ScAddress.scAddressTypeAccount(StrKey.decodeEd25519PublicKey(walletAddress))).toXDR('base64')]
+                ]
+              }
+            ],
+            limit: 10000
+          });
+
+          if (events.events) {
+            let totalUserPledged = 0;
+            for (const ev of events.events) {
+              const amountStroops = Number(scValToNative(ev.value));
+              totalUserPledged += amountStroops / 10000000;
+            }
+            setUserPledged(totalUserPledged);
+          }
+        } catch(e) {
+          console.error("Failed to fetch user events", e);
+        }
+      }
+
     } catch (e) {
       console.error(e);
     } finally {
       setIsFetching(false);
     }
-  }, []);
+  }, [walletAddress]);
 
   useEffect(() => {
     fetchState();
@@ -183,5 +230,5 @@ export function useContract(walletAddress: string | null) {
     }
   };
 
-  return { target, pledged, isFetching, isPledging, pledge, txStatus, txHash, error, setPledged };
+  return { target, pledged, userBalance, userPledged, isFetching, isPledging, pledge, txStatus, txHash, error, setPledged };
 }

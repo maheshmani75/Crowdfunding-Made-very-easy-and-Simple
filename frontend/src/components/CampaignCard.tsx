@@ -10,7 +10,7 @@ interface CampaignCardProps {
 }
 
 export const CampaignCard: React.FC<CampaignCardProps> = ({ walletAddress }) => {
-  const { target, pledged, isFetching, isPledging, pledge, txStatus, txHash, error, setPledged } = useContract(walletAddress);
+  const { target, pledged, userBalance, userPledged, isFetching, isPledging, pledge, txStatus, txHash, error, setPledged } = useContract(walletAddress);
   const [amount, setAmount] = useState<string>('');
 
   useContractEvents((amountPledged) => {
@@ -106,6 +106,24 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({ walletAddress }) => 
           <span className="font-medium text-white">{progress.toFixed(1)}% Funded</span>
           <span className="flex items-center gap-1 text-secondary font-medium"><TrendingUp className="w-4 h-4"/> Live</span>
         </div>
+
+        {/* User Specific Data */}
+        {walletAddress && (
+          <div className="mb-6 bg-black/30 rounded-xl p-4 border border-white/5 flex flex-wrap justify-between items-center gap-4">
+            <div>
+              <p className="text-xs text-gray-500 mb-1">Available Balance</p>
+              <p className="text-lg font-bold text-white">
+                {userBalance !== null ? `${userBalance.toLocaleString()} XLM` : 'Loading...'}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-gray-500 mb-1">Your Total Pledges</p>
+              <p className="text-lg font-bold text-primary">
+                {userPledged.toLocaleString()} XLM
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Input area */}
         <div className="flex gap-3 mb-4">
