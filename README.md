@@ -82,7 +82,7 @@ These are real, on-chain invocations of the `pledge()` function on this contract
 
 The app supports multiple wallets via the connect modal:
 
-![Wallet Options](./screenshots/connecting_pop%20UP.png)
+![Wallet Options](./screenshots/multiple%20wallet%20option.png)
 
 ### Contract Functions
 
