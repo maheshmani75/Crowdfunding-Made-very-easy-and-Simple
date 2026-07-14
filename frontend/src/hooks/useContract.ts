@@ -10,9 +10,11 @@ import {
   StrKey 
 } from '@stellar/stellar-sdk';
 import { StellarWalletsKit } from "@creit.tech/stellar-wallets-kit";
+import { FreighterModule } from "@creit.tech/stellar-wallets-kit/modules/freighter";
+
 const WalletNetwork = { TESTNET: 'TESTNET' };
 const FREIGHTER_ID = 'freighter';
-const allowAllModules = () => [];
+const allowAllModules = () => [new FreighterModule()];
 
 const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || '';
 const RPC_URL = 'https://soroban-testnet.stellar.org';
@@ -24,12 +26,16 @@ export function useContract(walletAddress: string | null) {
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [isPledging, setIsPledging] = useState<boolean>(false);
   const [txStatus, setTxStatus] = useState<'IDLE' | 'PENDING' | 'SUCCESS' | 'FAIL'>('IDLE');
+  const [txHash, setTxHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const server = new rpc.Server(RPC_URL);
 
   const fetchState = useCallback(async () => {
-    if (!CONTRACT_ID) return;
+    if (!CONTRACT_ID) {
+      setIsFetching(false);
+      return;
+    }
     try {
       // get target
       const targetTx = new TransactionBuilder(
@@ -52,7 +58,6 @@ export function useContract(walletAddress: string | null) {
       const targetSim = await server.simulateTransaction(targetTx);
       if (rpc.Api.isSimulationSuccess(targetSim)) {
         const res = scValToNative(targetSim.result.retval);
-        // target is in stroops
         setTarget(Number(res) / 10000000);
       }
 
@@ -103,13 +108,14 @@ export function useContract(walletAddress: string | null) {
 
     setIsPledging(true);
     setTxStatus('PENDING');
+    setTxHash(null);
     setError(null);
 
     try {
       const account = await server.getAccount(walletAddress);
       const stroops = Math.floor(amount * 10000000);
 
-      // We'll use the native XLM token on testnet
+      // Native XLM token on testnet
       const nativeToken = 'CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC';
 
       const tx = new TransactionBuilder(account, {
@@ -133,7 +139,6 @@ export function useContract(walletAddress: string | null) {
       .setTimeout(30)
       .build();
 
-      // Simulate
       const preparedTx = await server.prepareTransaction(tx);
       
       const kit = new StellarWalletsKit({
@@ -156,6 +161,7 @@ export function useContract(walletAddress: string | null) {
       }
 
       if (status === 'SUCCESS') {
+        setTxHash(submitRes.hash);
         setTxStatus('SUCCESS');
         await fetchState();
       } else {
@@ -166,16 +172,16 @@ export function useContract(walletAddress: string | null) {
     } catch (e: any) {
       console.error(e);
       setTxStatus('FAIL');
-      if (e?.message?.includes("User declined")) {
+      if (e?.message?.includes("User declined") || e?.message?.includes("rejected")) {
         setError("Transaction rejected by user.");
       } else {
         setError(e?.message || "An error occurred.");
       }
     } finally {
       setIsPledging(false);
-      setTimeout(() => setTxStatus('IDLE'), 5000);
+      setTimeout(() => setTxStatus('IDLE'), 8000);
     }
   };
 
-  return { target, pledged, isFetching, isPledging, pledge, txStatus, error, setPledged };
+  return { target, pledged, isFetching, isPledging, pledge, txStatus, txHash, error, setPledged };
 }

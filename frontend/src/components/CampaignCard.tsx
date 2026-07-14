@@ -10,7 +10,7 @@ interface CampaignCardProps {
 }
 
 export const CampaignCard: React.FC<CampaignCardProps> = ({ walletAddress }) => {
-  const { target, pledged, isFetching, isPledging, pledge, txStatus, error, setPledged } = useContract(walletAddress);
+  const { target, pledged, isFetching, isPledging, pledge, txStatus, txHash, error, setPledged } = useContract(walletAddress);
   const [amount, setAmount] = useState<string>('');
 
   useContractEvents((amountPledged) => {
@@ -34,9 +34,24 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({ walletAddress }) => 
         origin: { y: 0.6 },
         colors: ['#6D28D9', '#00D2FF', '#ffffff']
       });
-      toast.success('Pledge Successful! Thank you for backing.', {
-        icon: '🎉',
-      });
+      toast.success(
+        (t) => (
+          <div className="flex flex-col gap-1">
+            <span className="font-bold">Pledge Successful!</span>
+            {txHash && (
+              <a 
+                href={`https://stellar.expert/explorer/testnet/tx/${txHash}`} 
+                target="_blank" 
+                rel="noreferrer"
+                className="text-xs text-primary hover:text-secondary underline"
+              >
+                Verify on Explorer
+              </a>
+            )}
+          </div>
+        ),
+        { icon: '🎉', duration: 8000 }
+      );
     } else if (txStatus === 'FAIL') {
       if (error) {
          toast.error(`Pledge Failed: ${error}`);
@@ -46,7 +61,7 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({ walletAddress }) => 
     } else if (error && txStatus !== 'FAIL') {
        toast.error(`Error: ${error}`);
     }
-  }, [txStatus, error]);
+  }, [txStatus, error, txHash]);
 
   const progress = target > 0 ? Math.min((pledged / target) * 100, 100) : 0;
 

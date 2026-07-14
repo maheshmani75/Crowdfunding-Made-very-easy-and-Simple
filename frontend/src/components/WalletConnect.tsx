@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { StellarWalletsKit, Networks } from "@creit.tech/stellar-wallets-kit";
+import { FreighterModule } from "@creit.tech/stellar-wallets-kit/modules/freighter";
 const WalletNetwork = { TESTNET: 'TESTNET' };
 const FREIGHTER_ID = 'freighter';
-const allowAllModules = () => [];
+const allowAllModules = () => [new FreighterModule()];
 import { Wallet, Loader2, AlertCircle } from 'lucide-react';
 
 interface WalletConnectProps {
